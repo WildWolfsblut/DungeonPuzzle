@@ -3,11 +3,11 @@ extends CharacterBody2D
 
 const TILE_SIZE: int = 32
 
-var grid_position: Vector2i = Vector2i.ZERO
+@export var grid_position: Vector2i = Vector2i(3, 3)
 
 
 func _ready() -> void:
-	position = Vector2(grid_position * TILE_SIZE)
+	position = Vector2(grid_position * TILE_SIZE) + Vector2(TILE_SIZE, TILE_SIZE) / 2.0
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -23,4 +23,4 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _move(direction: Vector2i) -> void:
 	grid_position += direction
-	position = Vector2(grid_position * TILE_SIZE)
+	position = Vector2(grid_position * TILE_SIZE) + Vector2(TILE_SIZE, TILE_SIZE) / 2.0
