@@ -4,6 +4,7 @@ extends CharacterBody2D
 const TILE_SIZE: int = 32
 
 @export var grid_position: Vector2i = Vector2i(3, 3)
+@onready var ground: TileMapLayer = get_parent().get_node("Level/Ground") as TileMapLayer
 
 
 func _ready() -> void:
@@ -22,5 +23,17 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _move(direction: Vector2i) -> void:
-	grid_position += direction
-	position = Vector2(grid_position * TILE_SIZE) + Vector2(TILE_SIZE, TILE_SIZE) / 2.0
+	var target_position: Vector2i = grid_position + direction
+
+	if _is_walkable(target_position):
+		grid_position = target_position
+		position = Vector2(grid_position * TILE_SIZE) + Vector2(TILE_SIZE, TILE_SIZE) / 2.0
+
+
+func _is_walkable(target_position: Vector2i) -> bool:
+	var tile_data: TileData = ground.get_cell_tile_data(target_position)
+
+	if tile_data == null:
+		return false
+
+	return not tile_data.get_collision_polygons_count(0) > 0
